@@ -1,90 +1,88 @@
-﻿namespace GenLinkedList
+﻿public class GenericList<T>
 {
-    class Program
+    public class Node
     {
-        static void Main(string[] args)
+        // fields
+        private Node next;
+        private T data;
+
+        // construtor
+        public Node(T t)
         {
-            GenericList<object> list = new GenericList<object>();
+            next = null;
+            data = t;
+        }
 
-            // Add items to list.
-            list.AddHead("some string here");
-            list.AddHead(DateTime.Today.ToLongDateString());
-            list.AddHead(13);
-            list.AddHead(13.005);
-            for (int x = 0; x < 10; x++)
-            {
-                list.AddHead(x);
-            }
+        // property setter and getter
+        public Node Next
+        {
+            get { return next; }
+            set { next = value; }
+        }
+        public T Data
+        {
+            get { return data; }
+            set { data = value; }
+        }
+    }
 
-            // Enumerate list.
-            foreach (object i in list)
-            {
-                Console.WriteLine(i + " " + i.GetType());
-            }
-            Console.WriteLine("\nDone");
+    private Node head;
+    private Node Tail;
+
+    //constructor
+    public GenericList()
+    {
+        head = null;
+        Tail = null;
+    }
+    public void AddHead(T t)
+    {
+        Node n = new Node(t);
+        n.Next = head;
+        head = n;
+    }
+    public void AddTail(T t)
+    {
+        Node n = new Node(t);
+
+        Node current = head;
+
+        while (current.Next != null)
+        {
+            current = current.Next;
+        }
+        current.Next = n;
+
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        Node current = head;
+
+        while (current != null)
+        {
+            yield return current.Data;
+            current = current.Next;
         }
     }
 }
 
-namespace GenLinkedList
+class Program
 {
-    // type parameter T in angle brackets
-    class GenericList<T>
+    static void Main()
     {
-        // The nested class is also generic on T.
-        public class Node
+        GenericList<object> list = new();
+
+        list.AddHead(1);
+        list.AddHead(5);
+        list.AddHead(4);
+        list.AddHead(3);
+
+        list.AddTail(3);
+        foreach (object i in list)
         {
-            private Node next;
-            // T as private member data type.
-            private T data;
-
-
-            // T used in non-generic constructor.
-            public Node(T t)
-            {
-                next = null;
-                data = t;
-            }
-
-            public Node Next
-            {
-                get { return next; }
-                set { next = value; }
-            }
-
-            public T Data
-            {
-                get { return data; }
-                set { data = value; }
-            }
+            Console.WriteLine(i);
         }
 
-        private Node head;
-
-        // constructor
-        public GenericList()
-        {
-            head = null;
-        }
-
-        // T as method parameter type
-        public void AddHead(T t)
-        {
-            Node n = new Node(t);
-            n.Next = head;
-            head = n;
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            Node current = head;
-
-            while (current != null)
-            {
-                yield return current.Data;
-                current = current.Next;
-            }
-
-        }
     }
 }
